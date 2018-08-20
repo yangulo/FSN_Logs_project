@@ -1,11 +1,15 @@
+#!/usr/bin/env python
 import psycopg2
 
 # Fetch records from the database.
-db = psycopg2.connect("dbname=news")
+try:
+    db = psycopg2.connect("dbname=news")
+except:
+    print ("Unable to connect to the database")
 c = db.cursor()
 
-articles_query = "SELECT * FROM top_articles"
-authors_query = "SELECT * FROM top_authors"
+articles_query = "SELECT * FROM top_articles_titles"
+authors_query = "SELECT * FROM top_authors_articles"
 error_date_query = "SELECT * FROM error_date"
 c.execute(articles_query)
 articles = c.fetchall()
@@ -27,7 +31,7 @@ print
 print question2
 for row in authors:
     row = list(row)
-    print(" "+row[1]+" with "+str(row[3])+" Views")
+    print(" "+row[0]+" with "+str(row[1])+" Views")
 print
 print question3
 for row in error_dates:
