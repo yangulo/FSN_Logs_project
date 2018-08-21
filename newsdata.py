@@ -4,8 +4,10 @@ import psycopg2
 # Fetch records from the database.
 try:
     db = psycopg2.connect("dbname=news")
-except:
+except Exception:
     print ("Unable to connect to the database")
+    raise
+
 c = db.cursor()
 
 articles_query = "SELECT * FROM top_articles_titles"
@@ -35,5 +37,5 @@ for row in authors:
 print
 print question3
 for row in error_dates:
-    print(" "+str(row[0])+" with "+str(round(row[3],2))+"% Views")
+    print(" "+str(row[0])+" with "+str(round(row[3], 2))+"% Views")
 db.close()

@@ -14,7 +14,7 @@
  https://realpython.com/installing-python/</li>
  <li>Install VirtualBox. VirtualBox is the software that actually runs the virtual machine. You can download it from virtualbox.org, in the following link
  https://www.virtualbox.org/wiki/Download_Old_Builds_5_1</li>
- <li>Install Vagrant. Vagrant is the software that configures the VM and lets you share files between your host computer and the VM's filesystem. Download it from vagrantup.com. 
+ <li>Install Vagrant. Vagrant is the software that configures the VM and lets you share files between your host computer and the VM's filesystem. Download it from vagrantup.com.
  In order to access the news database you need to have VM and vagrant installed. First cd vagrant and run vagrant ssh and vagrant up</li>
  <li>Use psql -d news -f newsdata.sql</li>
  <li>Run psql, then use \c news to connect to news databse</li>
@@ -28,15 +28,15 @@
 
 <h2>CREATE VIEW COMMANDS</h2>
 CREATE VIEW top_articles AS
-SELECT substring(path,10,length(path)) AS ns, 
-count(*) AS total 
+SELECT substring(path,10,length(path)) AS ns,
+count(*) AS total
 FROM log
 GROUP BY ns
 HAVING substring(path,10,length(path)) <> ''
 ORDER BY total DESC
 LIMIT 3;
 
-CREATE VIEW top_articles_titles AS 
+CREATE VIEW top_articles_titles AS
 SELECT title, total
 FROM articles
 INNER JOIN top_articles
@@ -58,18 +58,6 @@ INNER JOIN top_authors
 ON id=author;
 
 CREATE VIEW error_date AS
-SELECT A.date_tmp, total_errors, total_requests, (total_errors*100.0/total_requests) as percentage 
-FROM 
+SELECT A.date_tmp, total_errors, total_requests, (total_errors*100.0/total_requests) as percentage
+FROM
 (SELECT date(time) as date_tmp, count(*) as total_errors
-FROM log
-WHERE status <> '200 OK'
-GROUP BY date_tmp
-ORDER BY 1) as A
-INNER JOIN
-(SELECT date(time) as date_tmp, count(*) as total_requests
-FROM log
-GROUP BY date_tmp
-ORDER BY 1) as B
-ON A.date_tmp=B.date_tmp
-WHERE (total_errors*100.0/total_requests) >1;
-
